@@ -58,7 +58,7 @@ func Default(ctx echo.Context) error {
 
 	//设置接收消息的处理方法
 	server.SetMessageHandler(func(msg message.MixMessage) *message.Reply {
-		text := message.NewText(ask(msg.Content))
+		text := message.NewText(tlAI(msg.Content))
 		return &message.Reply{message.MsgTypeText, text}
 	})
 
