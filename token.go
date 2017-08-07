@@ -1,11 +1,18 @@
 package main
 
 import (
+	"encoding/json"
+
 	"github.com/levigross/grequests"
 )
 
+type Token struct {
+	AccessToken string `json:"access_token"`
+	Expire      string `json:"expires_in"`
+}
+
 // 获取access_token
-func GetAccessToken() string {
+func (t *Token) Get() []byte {
 	var args = map[string]string{
 		"appid":      config.Wx.AppID,
 		"secret":     config.Wx.AppSecret,
@@ -17,5 +24,13 @@ func GetAccessToken() string {
 	}
 
 	res, _ := grequests.Get("https://api.weixin.qq.com/cgi-bin/token", ro)
-	return res.String()
+	return res.Bytes()
+}
+
+func (t *Token) Parse(at []byte) (err error) {
+	if err = json.Unmarshal(at, t); err != nil {
+		return err
+	}
+
+	return
 }
