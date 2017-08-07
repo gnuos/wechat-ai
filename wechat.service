@@ -5,8 +5,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/www/wechat-ai
-ExecStart=/var/www/wechat-ai/wechat-ai
+WorkingDirectory={{ wechat-ai path }}
+ExecStart={{ wechat-ai path }}/wechat-ai
 Restart=abort
 
 [Install]
