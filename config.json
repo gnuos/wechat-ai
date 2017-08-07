@@ -1,0 +1,16 @@
+{
+	"listen": "127.0.0.1:8080",
+	"log_file": "log/wechat.log",
+	"log_format": "[WeChat] ${time_rfc3339}\t${remote_ip}\t${method}\t${uri}\t${status} ${referer} ${host}\n",
+	"weixin": {
+		"appid": "这里填写微信公众号AppID",
+		"secret": "这里填写微信公众号AppSecret",
+		"token": "这里填写微信公众号设置的Token",
+		"encodingAESKey": "这里填写微信公众号上生成的encodingAESKey"
+	},
+	"ai": {
+		"greeting": "哨兵张嘎不知道您说的是什么，请重新提问",
+		"url": "http://www.tuling123.com/openapi/api",
+		"key": "这里填写图灵机器人网站上生成的ApiKey"
+	}
+}
