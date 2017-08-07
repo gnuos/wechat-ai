@@ -25,18 +25,6 @@ func GetIP(ctx echo.Context) error {
 
 }
 
-// 路由 web.Any("/", GetToken)
-// 在验证微信公众号服务器时，需要将默认的路由改为这个
-func GetToken(ctx echo.Context) error {
-	if !validateUrl(ctx) {
-		log.Println("Wechat Service: this http request is not from Wechat platform!")
-		return ctx.String(http.StatusMethodNotAllowed, `{"message": 405}`)
-	}
-
-	echostr := ctx.QueryParam("echostr")
-	return ctx.String(http.StatusOK, echostr)
-}
-
 // 路由 web.Any("/", Default)
 func Default(ctx echo.Context) error {
 	// 从配置文件获取微信的AppID和其他参数
@@ -51,6 +39,10 @@ func Default(ctx echo.Context) error {
 	if !validateUrl(ctx) {
 		log.Println("Wechat Service: this http request is not from Wechat platform!")
 		return ctx.String(http.StatusForbidden, `{"message": 403}`)
+	}
+
+	if echostr := ctx.QueryParam("echostr"); echostr != "" {
+		return ctx.String(http.StatusOK, echostr)
 	}
 
 	wc := wechat.NewWechat(wxConf)
