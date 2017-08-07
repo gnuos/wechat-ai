@@ -1,0 +1,14 @@
+[Unit]
+Description=WeChat Public Accounts Service
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/wechat-ai
+ExecStart=/var/www/wechat-ai/wechat-ai
+Restart=abort
+
+[Install]
+WantedBy=multi-user.target
+
