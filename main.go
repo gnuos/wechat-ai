@@ -30,7 +30,7 @@ func main() {
 	flag.Parse()
 	config, err = ParseConfig(configFile)
 	if err != nil {
-		log.Fatal("a vailid json config file must exist")
+		panic("a vailid json config file must exist")
 	}
 
 	web := echo.New()
@@ -44,7 +44,7 @@ func main() {
 	if config.LogFile != "" {
 		f, err := os.OpenFile(config.LogFile, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 		if err != nil {
-			os.Exit(-1)
+			panic(err)
 		}
 
 		defer f.Close()
