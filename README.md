@@ -15,6 +15,7 @@
 ```bash
 git clone https://github.com/gnuos/wechat-ai
 cd wechat-ai
+go get -v .
 go build
 ```
 
