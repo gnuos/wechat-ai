@@ -4,29 +4,28 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/devfeel/dotweb"
 	"github.com/silenceper/wechat"
 	"github.com/silenceper/wechat/message"
 )
 
-// 路由 web.HEAD("/*", Null)
-func Null(ctx echo.Context) error {
+// 路由 HEAD("*", Null)
+func Null(ctx dotweb.Context) error {
 	return nil
 }
 
-// 路由 web.GET("/ip", GetIP)
-func GetIP(ctx echo.Context) error {
+// 路由 GET("/ip", GetIP)
+func GetIP(ctx dotweb.Context) error {
 	var resp struct {
 		IP string `json:"ip"`
 	}
-	resp.IP = ctx.RealIP()
+	resp.IP = ctx.Request().QueryHeader("X-Forwarded-For")
 
-	return ctx.JSON(http.StatusOK, &resp)
-
+	return ctx.WriteJson(&resp)
 }
 
-// 路由 web.Any("/", Default)
-func Default(ctx echo.Context) error {
+// 路由 Any("/", Default)
+func Default(ctx dotweb.Context) error {
 	// 从配置文件获取微信的AppID和其他参数
 	var wxConf = &wechat.Config{
 		AppID:          config.Wx.AppID,
@@ -38,15 +37,15 @@ func Default(ctx echo.Context) error {
 	// 检查请求来源
 	if !validateUrl(ctx) {
 		log.Println("Wechat Service: this http request is not from Wechat platform!")
-		return ctx.String(http.StatusForbidden, `{"message": 403}`)
+		return ctx.WriteStringC(http.StatusForbidden, `{"message": 403}`)
 	}
 
-	if echostr := ctx.QueryParam("echostr"); echostr != "" {
-		return ctx.String(http.StatusOK, echostr)
+	if echostr := ctx.QueryString("echostr"); echostr != "" {
+		return ctx.WriteString(echostr)
 	}
 
 	wc := wechat.NewWechat(wxConf)
-	server := wc.GetServer(ctx.Request(), ctx.Response().Writer)
+	server := wc.GetServer(ctx.Request().Request, ctx.Response().Writer())
 
 	//设置接收消息的处理方法
 	server.SetMessageHandler(func(msg message.MixMessage) *message.Reply {
@@ -62,4 +61,13 @@ func Default(ctx echo.Context) error {
 	}
 	//发送回复的消息
 	return server.Send()
+}
+
+func InitRoute(server *dotweb.HttpServer) {
+	server.Any("/", Default)
+	server.GET("/ip", GetIP)
+	server.HEAD("/ip", Null)
+	server.GET("/favicon.ico", func(ctx dotweb.Context) error {
+		return ctx.File("favicon.ico")
+	})
 }

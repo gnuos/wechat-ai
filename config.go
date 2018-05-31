@@ -8,8 +8,8 @@ import (
 
 // 配置文件的json绑定对象
 type Config struct {
-	Listen    string `json:"listen"`
-	LogFile   string `json:"log_file"`
+	Port      int    `json:"port"`
+	LogPath   string `json:"log_path"`
 	LogFormat string `json:"log_format"`
 	Wx        Wexin  `json:"weixin"`
 	Ai        AI     `json:"ai"`

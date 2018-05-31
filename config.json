@@ -1,6 +1,6 @@
 {
-	"listen": "127.0.0.1:8080",
-	"log_file": "log/wechat.log",
+	"port": 8080,
+	"log_path": "./logs",
 	"log_format": "[WeChat] ${time_rfc3339}\t${remote_ip}\t${method}\t${uri}\t${status} ${referer} ${host}\n",
 	"weixin": {
 		"appid": "这里填写微信公众号AppID",
@@ -9,7 +9,7 @@
 		"encodingAESKey": "这里填写微信公众号上生成的encodingAESKey"
 	},
 	"ai": {
-		"greeting": "哨兵张嘎不知道您说的是什么，请重新提问",
+		"greeting": "这里需要设置一个默认消息，当消息错误时，用于要求用户重新发送消息",
 		"url": "http://www.tuling123.com/openapi/api",
 		"key": "这里填写图灵机器人网站上生成的ApiKey"
 	}

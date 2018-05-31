@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/devfeel/dotweb"
 )
 
 // 对请求的参数做SHA1校验
@@ -20,11 +20,11 @@ func makeSignature(timestamp, nonce string) string {
 }
 
 // 检查url中的参数
-func validateUrl(ctx echo.Context) bool {
-	timestamp := ctx.QueryParam("timestamp")
-	nonce := ctx.QueryParam("nonce")
+func validateUrl(ctx dotweb.Context) bool {
+	timestamp := ctx.QueryString("timestamp")
+	nonce := ctx.QueryString("nonce")
 	signatureGen := makeSignature(timestamp, nonce)
-	signatureIn := ctx.QueryParam("signature")
+	signatureIn := ctx.QueryString("signature")
 
 	if signatureGen != signatureIn {
 		return false
